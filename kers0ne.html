@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Kers0ne Whitlisting Hosting — Lua Script Protection</title>
+<link rel="icon" href="/assets/sudo-logo.jpg" type="image/jpeg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+@font-face{font-family:'H';src:url('/assets/fonts/H.woff2') format('woff2');font-weight:100 900;font-display:swap}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05050a;--paper:#0a0a18;--ink:#e4e4f0;--accent:#1a6bff;
+  --gray:#8a8a9e;--gray2:#5a5a70;--line:rgba(255,255,255,.06);--line2:rgba(255,255,255,.03);
+  --maxw:1280px;--ease:cubic-bezier(.19,1,.22,1);--glow:0 0 30px rgba(26,107,255,.15);
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.5;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 40px}
+.display{font-family:'H','Space Grotesk',sans-serif;font-weight:100;line-height:.92;letter-spacing:-.03em}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--gray)}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,5,10,.85);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line2)}
+nav .inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px;padding:0 40px}
+.brand{display:flex;align-items:center;gap:11px;font-family:'H',sans-serif;font-weight:100;font-size:25px;letter-spacing:.02em}
+.brand img{width:26px;height:26px;border-radius:6px}
+.nav-mid{display:flex;gap:34px}
+.nav-mid a{font-size:13.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);
+  position:relative;transition:color .25s var(--ease)}
+.nav-mid a:hover{color:var(--ink)}
+.nav-mid a::after{content:'';position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--accent);transition:width .3s var(--ease)}
+.nav-mid a:hover::after{width:100%}
+.nav-end{display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
+  font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;transition:.25s var(--ease)}
+.btn.line{padding:10px 18px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:transparent}
+.btn.line:hover{border-color:var(--accent);color:var(--accent)}
+.btn.solid{padding:11px 22px;border-radius:8px;background:var(--accent);color:#fff}
+.btn.solid:hover{filter:brightness(1.15);box-shadow:var(--glow)}
+.hamb{display:none;background:none;border:none;cursor:pointer;color:var(--ink)}
+.hamb svg{width:26px;height:26px}
+@media(max-width:900px){.nav-mid,.nav-end{display:none}.hamb{display:block}}
+.mobile{display:none;position:fixed;inset:0;z-index:200;background:rgba(5,5,10,.96);flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.mobile.open{display:flex}
+.mobile a{font-family:'H',sans-serif;font-weight:100;font-size:34px;letter-spacing:-.02em;padding:6px 0}
+.mobile a:hover{color:var(--accent)}
+.mclose{position:absolute;top:22px;right:28px;background:none;border:none;cursor:pointer;color:var(--ink)}
+.mclose svg{width:28px;height:28px}
+
+/* ===== HERO ===== */
+.hero{padding:188px 0 70px;position:relative}
+.hero .kicker{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+.hero .kicker .ln{height:1px;width:54px;background:var(--ink)}
+.hero h1{font-size:clamp(58px,12.5vw,200px);text-transform:uppercase}
+.hero h1 .o{color:var(--accent)}
+.hero .sub{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:30px;margin-top:36px}
+.hero .sub p{max-width:460px;font-size:18px;color:var(--gray);line-height:1.7}
+.hero .cta{display:flex;gap:12px;flex-shrink:0}
+.hero .cta .btn{font-size:13px}
+.hero .cta .btn.solid{padding:15px 30px;box-shadow:var(--glow)}
+.hero .cta .btn.line{padding:14px 26px}
+
+/* marquee strip */
+.strip{margin-top:70px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap}
+.strip .run{display:inline-block;padding:18px 0;animation:run 26s linear infinite}
+.strip .run span{font-family:'SF Mono',ui-monospace,Menlo,monospace;font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin:0 26px;color:var(--gray)}
+.strip .run span .dot{color:var(--accent);margin-left:26px}
+@keyframes run{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ===== STATS ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:0}
+.stat{background:var(--bg);padding:46px 30px}
+.stat .v{font-family:'H',sans-serif;font-weight:100;font-size:clamp(46px,6vw,82px);line-height:1;letter-spacing:-.03em;color:var(--accent)}
+.stat .l{margin-top:14px;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== SECTION HEAD ===== */
+.section{padding:118px 0}
+.sec-head{margin-bottom:64px;max-width:760px}
+.sec-head h2{font-size:clamp(40px,6vw,86px);text-transform:uppercase;margin-top:18px}
+.sec-head p{margin-top:22px;font-size:18px;color:var(--gray);max-width:520px;line-height:1.7}
+.idx{font-size:12px;font-weight:600;letter-spacing:.2em;color:var(--gray2)}
+
+/* ===== DEMO ===== */
+.demo{background:var(--paper);color:#e9e4dc;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.demo .bar{display:flex;align-items:center;gap:18px;padding:16px 22px;border-bottom:1px solid var(--line)}
+.demo .tab{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6a657d;cursor:pointer;
+  background:none;border:none;padding:6px 0;transition:color .2s}
+.demo .tab.active{color:#fff}
+.demo .tab.active .u{display:block}
+.demo .tab .u{display:none;height:1px;background:var(--accent);margin-top:6px}
+.demo pre{padding:30px 26px;font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:14.5px;line-height:1.85;
+  overflow:auto;white-space:pre;color:#d7d2c8}
+.kw{color:#ff7a4d}.str{color:#9fe0a0}.fn{color:#f1b24a}.bi{color:#ff4401}.cm{color:#6a655d}
+.flip{display:none}.flip.show{display:block}
+
+/* ===== OBFUSCATOR ===== */
+.obfuscator-box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:40px;margin-top:30px}
+.obfuscator-box textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--ink);
+  padding:16px;font-family:'SF Mono',monospace;font-size:14px;line-height:1.6;resize:vertical;min-height:200px}
+.obfuscator-box textarea:focus{outline:none;border-color:var(--accent)}
+.obfuscator-box .row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.obfuscator-box .row .btn{flex:1;min-width:140px}
+.obfuscator-box .status{margin-top:12px;font-size:14px;color:var(--gray)}
+.obfuscator-box .status.success{color:#4ade80}
+.obfuscator-box .status.error{color:#f87171}
+
+/* ===== FEATURES ===== */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line)}
+.feat .row{display:contents}
+.fcell{padding:56px 0;border-bottom:1px solid var(--line)}
+.fcell.vis{display:flex;flex-direction:column;justify-content:center;gap:8px;padding-right:60px}
+.fcell .big{font-family:'H',sans-serif;font-weight:100;font-size:clamp(50px,8vw,120px);line-height:.9;letter-spacing:-.03em;color:var(--accent)}
+.fcell .cap{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gray)}
+.fcell.txt{padding-left:60px;border-left:1px solid var(--line)}
+.fcell.txt h3{font-size:28px;font-weight:600;letter-spacing:-.01em}
+.fcell.txt p{margin:16px 0 22px;color:var(--gray);line-height:1.7;max-width:440px;font-size:16px}
+.fcell.txt ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fcell.txt li{position:relative;padding-left:24px;font-size:15.5px;color:var(--ink)}
+.fcell.txt li::before{content:'';position:absolute;left:0;top:8px;width:7px;height:7px;background:var(--accent)}
+@media(max-width:860px){.feat{grid-template-columns:1fr}.fcell.vis{padding-right:0}.fcell.txt{padding-left:0;border-left:none}}
+
+/* ===== CTA ===== */
+.endcta{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:96px 40px;text-align:center}
+.endcta h2{font-size:clamp(40px,7vw,104px);text-transform:uppercase;color:var(--ink)}
+.endcta h2 .o{color:var(--accent)}
+.endcta p{color:var(--gray);margin:22px 0 36px;font-size:18px}
+.endcta .btn.solid{background:var(--accent);padding:16px 36px;font-size:14px;border-radius:8px}
+.endcta .btn.solid:hover{filter:brightness(1.15);box-shadow:var(--glow)}
+
+/* ===== FOOTER ===== */
+footer{padding:64px 0 120px}
+footer .top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;
+  border-top:1px solid var(--line);padding-top:40px}
+footer .big{font-family:'H',sans-serif;font-weight:100;font-size:clamp(56px,11vw,150px);line-height:.85;letter-spacing:-.04em;text-transform:uppercase}
+footer .links{display:flex;flex-wrap:wrap;gap:8px 26px;justify-content:flex-end}
+footer .links a{font-size:14px;letter-spacing:.06em;color:var(--gray);transition:color .2s}
+footer .links a:hover{color:var(--accent)}
+footer .copy{margin-top:30px;font-size:13px;color:var(--gray2);letter-spacing:.06em}
+
+/* ===== reveal ===== */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav><div class="inner">
+  <a class="brand" href="/"><img src="/assets/sudo-logo.jpg" alt="" />Kers0ne Whitlisting Hosting</a>
+  <div class="nav-mid">
+    <a href="/docs">Docs</a>
+    <a href="/notice">Notice</a>
+    <a href="/dashboard">Dashboard</a>
+  </div>
+  <div class="nav-end">
+    <a class="btn line" href="/dashboard">Log in</a>
+    <a class="btn solid" href="/dashboard">Get Started</a>
+  </div>
+  <button class="hamb" id="menuToggle" aria-label="Menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg>
+  </button>
+</div></nav>
+<div class="mobile" id="mobileMenu">
+  <button class="mclose" id="menuClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <a href="/">Home</a><a href="/docs">Docs</a>
+  <a href="/notice">Notice</a><a href="/dashboard">Dashboard</a>
+</div>
+
+<!-- HERO -->
+<header class="hero"><div class="wrap">
+  <div class="kicker"><span class="ln"></span><span class="eyebrow">Lua Script Protection</span></div>
+  <h1 class="display">Protect your<br>Lua <span class="o">scripts.</span></h1>
+  <div class="sub">
+    <p>A custom virtual-machine compiler, per-request randomization, and single-use delivery. Your code is compiled to bytecode that never ships as readable Lua — and it stays yours.</p>
+    <div class="cta">
+      <a class="btn solid" href="/dashboard">Get Started</a>
+      <a class="btn line" href="/docs">Read the Docs</a>
+    </div>
+  </div>
+</div></header>
+
+<!-- MARQUEE -->
+<div class="strip"><div class="run">
+  <span>VM Bytecode<span class="dot">/</span></span><span>Per-Request Randomization<span class="dot">/</span></span><span>Single-Use Delivery<span class="dot">/</span></span><span>No loadstring<span class="dot">/</span></span><span>Anti-Tamper<span class="dot">/</span></span>
+  <span>VM Bytecode<span class="dot">/</span></span><span>Per-Request Randomization<span class="dot">/</span></span><span>Single-Use Delivery<span class="dot">/</span></span><span>No loadstring<span class="dot">/</span></span><span>Anti-Tamper<span class="dot">/</span></span>
+</div></div>
+
+<!-- STATS -->
+<div class="wrap"><div class="stats">
+  <div class="stat"><div class="v display">9</div><div class="l">Security Layers</div></div>
+  <div class="stat"><div class="v display">80+</div><div class="l">Integrity Checks</div></div>
+  <div class="stat"><div class="v display">22</div><div class="l">Shield Modules</div></div>
+  <div class="stat"><div class="v display">&lt;1s</div><div class="l">Verification</div></div>
+</div></div>
+
+<!-- DEMO -->
+<section class="section"><div class="wrap reveal">
+  <div class="sec-head">
+    <span class="idx">01 — Live Preview</span>
+    <h2 class="display">See the<br>difference</h2>
+    <p>Your clean, readable Lua becomes an unreadable VM-compiled payload — different on every single request.</p>
+  </div>
+  <div class="demo">
+    <div class="bar">
+      <button class="tab active" data-t="in" onclick="showTab('in')">Input<span class="u"></span></button>
+      <button class="tab" data-t="out" onclick="showTab('out')">Output<span class="u"></span></button>
+    </div>
+    <pre class="flip show" id="flip-in"><span class="kw">local</span> HttpService = <span class="bi">game</span>:<span class="fn">GetService</span>(<span class="str">"HttpService"</span>)
+<span class="kw">local</span> data = HttpService:<span class="fn">JSONDecode</span>(response)
+<span class="kw">for</span> i, v <span class="kw">in</span> <span class="bi">pairs</span>(data) <span class="kw">do</span>
+    <span class="bi">print</span>(<span class="str">"Key:"</span>, i, <span class="str">"Val:"</span>, v)
+<span class="kw">end</span></pre>
+    <pre class="flip" id="flip-out"><span class="cm">-- VM-compiled · per-request · no loadstring</span>
+<span class="kw">local</span> A=<span class="bi">{}</span>;<span class="kw">local</span> B=(<span class="bi">getfenv</span> <span class="kw">and</span> <span class="bi">getfenv</span>(<span class="fn">0</span>))
+A[<span class="fn">1</span>]=<span class="fn">241</span>;A[<span class="fn">2</span>]=<span class="fn">7</span>;A[<span class="fn">3</span>]=<span class="fn">3</span>;A[<span class="fn">4</span>]=<span class="fn">198</span>;A[<span class="fn">5</span>]=<span class="fn">52</span>
+<span class="kw">while</span> #A<<span class="fn">0x1f4</span> <span class="kw">do</span> A[#A+<span class="fn">1</span>]=(A[#A]*<span class="fn">137</span>+<span class="fn">43</span>)%<span class="fn">251</span> <span class="kw">end</span>
+<span class="kw">return</span> B[<span class="fn">"\004\019..."</span>](<span class="fn">--[[ decoded frame ]]</span>)</pre>
+  </div>
+</div></section>
+
+<!-- OBFUSCATOR -->
+<section class="section" style="padding-top:0"><div class="wrap reveal">
+  <div class="sec-head">
+    <span class="idx">02 — Obfuscate Your Script</span>
+    <h2 class="display">Protect your<br>code <span class="o">instantly</span></h2>
+    <p>Paste your Lua script below and get it obfuscated using our custom VM compiler.</p>
+  </div>
+  <div class="obfuscator-box">
+    <textarea id="scriptInput" placeholder="-- Paste your Lua script here...">local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+print("Hello, world!")</textarea>
+    <div class="row">
+      <button class="btn solid" onclick="obfuscateScript()">Obfuscate Script</button>
+      <button class="btn line" onclick="clearFields()">Clear</button>
+      <button class="btn line" onclick="copyOutput()">Copy Result</button>
+    </div>
+    <div id="statusMessage" class="status">Ready to obfuscate.</div>
+    <textarea id="scriptOutput" style="margin-top:16px;min-height:150px;" placeholder="Obfuscated output will appear here..." readonly></textarea>
+  </div>
+</div></section>
+
+<!-- FEATURES -->
+<section class="section" style="padding-top:0"><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="idx">03 — Why Kers0ne Lua Hosting</span>
+    <h2 class="display">Built different.<br>On purpose.</h2>
+    <p>Not another wrapper. A custom VM architecture designed from scratch — every layer is our own code.</p>
+  </div>
+  <div class="feat">
+    <div class="fcell vis reveal"><span class="big">&#8734;</span><span class="cap">Unique outputs</span></div>
+    <div class="fcell txt reveal"><h3>Per-Request Randomization</h3>
+      <p>Every load generates a completely new obfuscated output — different opcodes, names, and structure. Pattern matching is impossible.</p>
+      <ul><li>Randomized opcodes on every request</li><li>No two payloads are ever identical</li><li>Static analysis breaks immediately</li></ul></div>
+
+    <div class="fcell vis reveal"><span class="big">VM</span><span class="cap">Custom bytecode</span></div>
+    <div class="fcell txt reveal"><h3>Virtual Machine Architecture</h3>
+      <p>Scripts compile to custom bytecode that runs inside our proprietary VM. Standard decompilers produce garbage — there is no <code>loadstring</code> to hook.</p>
+      <ul><li>Proprietary instruction set</li><li>Multi-layer bytecode encryption</li><li>Anti-tamper integrity checks</li></ul></div>
+
+    <div class="fcell vis reveal"><span class="big">1×</span><span class="cap">Single-use URLs</span></div>
+    <div class="fcell txt reveal"><h3>One-Time Delivery</h3>
+      <p>Each payload is served through a unique URL that expires after a single fetch. Intercept it and it's already dead.</p>
+      <ul><li>HMAC-signed delivery URLs</li><li>Auto-expire after first fetch</li><li>Intrusion detection on replay</li></ul></div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0"><div class="wrap reveal">
+  <div class="endcta">
+    <h2 class="display">Ready to <span class="o">protect</span><br>your scripts?</h2>
+    <p>Create your account and start protecting your Lua scripts today.</p>
+    <a class="btn solid" href="/dashboard">Get Started</a>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer><div class="wrap">
+  <div class="top">
+    <div class="big">Lua Hosting</div>
+    <div class="links">
+      <a href="/">Home</a><a href="/docs">Docs</a>
+      <a href="/notice">Notice</a><a href="/terms">Terms</a>
+    </div>
+  </div>
+  <div class="copy">© 2027 Kers0ne Whitlisting Hosting — Lua Script Protection</div>
+</div></footer>
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.flip').forEach(f => f.classList.remove('show'));
+  document.querySelector(`.tab[data-t="${tab}"]`).classList.add('active');
+  document.getElementById(`flip-${tab}`).classList.add('show');
+}
+
+async function obfuscateScript() {
+  const input = document.getElementById('scriptInput').value;
+  const status = document.getElementById('statusMessage');
+  const output = document.getElementById('scriptOutput');
+  
+  if (!input.trim()) {
+    status.className = 'status error';
+    status.textContent = 'Please paste a script to obfuscate.';
+    return;
+  }
+  
+  status.className = 'status';
+  status.textContent = 'Obfuscating... Please wait.';
+  output.value = '';
+  
+  try {
+    const formData = new FormData();
+    const blob = new Blob([input], { type: 'text/plain' });
+    formData.append('file', blob, 'script.lua');
+    formData.append('anti_env_logger', 'true');
+    
+    const response = await fetch('https://kers0ne-0bf.lovable.app/api/public/obfuscate', {
+      method: 'POST',
+      headers: { 'X-API-Key': 'kers0neontop123' },
+      body: formData
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Obfuscation failed');
+    }
+    
+    const result = await response.text();
+    output.value = result;
+    status.className = 'status success';
+    status.textContent = 'Obfuscation complete! Your script is now protected.';
+  } catch (error) {
+    status.className = 'status error';
+    status.textContent = 'Error: ' + error.message;
+  }
+}
+
+function clearFields() {
+  document.getElementById('scriptInput').value = '';
+  document.getElementById('scriptOutput').value = '';
+  document.getElementById('statusMessage').className = 'status';
+  document.getElementById('statusMessage').textContent = 'Ready to obfuscate.';
+}
+
+function copyOutput() {
+  const output = document.getElementById('scriptOutput');
+  if (!output.value) {
+    document.getElementById('statusMessage').className = 'status error';
+    document.getElementById('statusMessage').textContent = 'Nothing to copy. Obfuscate a script first.';
+    return;
+  }
+  navigator.clipboard.writeText(output.value).then(() => {
+    document.getElementById('statusMessage').className = 'status success';
+    document.getElementById('statusMessage').textContent = 'Copied to clipboard!';
+  }).catch(() => {
+    output.select();
+    document.execCommand('copy');
+    document.getElementById('statusMessage').className = 'status success';
+    document.getElementById('statusMessage').textContent = 'Copied to clipboard!';
+  });
+}
+
+// Mobile menu toggle
+const menuToggle = document.getElementById('menuToggle');
+const menuClose = document.getElementById('menuClose');
+const mobileMenu = document.getElementById('mobileMenu');
+
+if (menuToggle) {
+  menuToggle.addEventListener('click', () => mobileMenu.classList.add('open'));
+}
+if (menuClose) {
+  menuClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+}
+
+// Intersection Observer for reveal animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
