@@ -3,1030 +3,627 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kers0ne Protection — Monochrome</title>
+    <title>Kers0ne Protection</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        /* ===== CAT'S BLACK & WHITE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        :root {
-            --bg: #000000;
-            --card: #0a0a0a;
-            --border: rgba(255, 255, 255, 0.08);
-            --accent: #ffffff;
-            --accent2: #aaaaaa;
-            --glow: rgba(255, 255, 255, 0.05);
-            --text: #ffffff;
-            --muted: #666666;
-            --radius: 12px;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #000;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 260px;
-            background: var(--card);
-            border-right: 1px solid var(--border);
-            padding: 32px 20px;
-            height: 100vh;
-            position: sticky;
-            top: 0;
-            overflow-y: auto;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .sidebar .logo {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 32px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-        }
-        .sidebar .logo span {
-            font-weight: 400;
-            color: var(--muted);
-            font-size: 14px;
-        }
-        .sidebar nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-        .sidebar nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        .sidebar nav a:hover {
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text);
-        }
-        .sidebar nav a.active {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-        .sidebar nav a .badge-nav {
-            margin-left: auto;
-            background: rgba(255, 255, 255, 0.06);
-            color: var(--muted);
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-        }
-        .sidebar .bottom {
-            border-top: 1px solid var(--border);
-            padding-top: 20px;
-            margin-top: auto;
-        }
-        .sidebar .bottom a {
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 16px;
-            border-radius: 12px;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        .sidebar .bottom a:hover {
-            background: rgba(255, 255, 255, 0.04);
-            color: #ff4444;
-        }
-
-        /* MAIN */
-        .main {
-            flex: 1;
-            padding: 32px 40px;
-            overflow-y: auto;
-            height: 100vh;
-        }
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .topbar-left h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .domain-badge {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 4px 16px;
-            font-size: 12px;
-            color: var(--muted);
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.3px;
-        }
-        .user {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .user .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #222;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 16px;
-            color: #fff;
-            border: 1px solid #333;
-        }
-        .user .name {
-            font-weight: 600;
-            font-size: 14px;
-            color: #fff;
-        }
-        .user .tag {
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        /* BUTTONS */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 22px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 13px;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            font-family: 'Inter', sans-serif;
-        }
-        .btn-primary {
-            background: #fff;
-            color: #000;
-        }
-        .btn-primary:hover {
-            background: #ddd;
-            transform: translateY(-1px);
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-        .btn-outline:hover {
-            border-color: #fff;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .btn-danger {
-            background: rgba(255, 68, 68, 0.08);
-            color: #ff4444;
-            border: 1px solid rgba(255, 68, 68, 0.15);
-        }
-        .btn-danger:hover {
-            background: rgba(255, 68, 68, 0.15);
-        }
-        .btn-success {
-            background: rgba(68, 255, 68, 0.08);
-            color: #44ff44;
-            border: 1px solid rgba(68, 255, 68, 0.15);
-        }
-        .btn-success:hover {
-            background: rgba(68, 255, 68, 0.15);
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 11px;
-            border-radius: 8px;
-        }
-
-        /* CARDS */
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 28px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-        .card:hover {
-            border-color: rgba(255, 255, 255, 0.12);
-        }
-        .card .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .card .header h3 {
-            font-size: 17px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-        }
-        .card .header h3 .count {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--muted);
-            background: rgba(255, 255, 255, 0.04);
-            padding: 2px 12px;
-            border-radius: 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 16px;
-        }
-        .script-card {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-        .script-card:hover {
-            border-color: #444;
-            transform: translateY(-2px);
-        }
-        .script-card .name {
-            font-weight: 600;
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 4px;
-        }
-        .script-card .id {
-            color: var(--muted);
-            font-size: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 10px;
-        }
-        .badge {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        .badge-active {
-            background: rgba(68, 255, 68, 0.1);
-            color: #44ff44;
-        }
-        .badge-disabled {
-            background: rgba(255, 68, 68, 0.1);
-            color: #ff4444;
-        }
-        .badge-ffa {
-            background: rgba(255, 255, 68, 0.1);
-            color: #ffff44;
-        }
-        .badge-compressed {
-            background: rgba(255, 255, 255, 0.05);
-            color: #aaa;
-        }
-        .loadstring-box {
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: #aaa;
-            word-break: break-all;
-            margin: 10px 0;
-            cursor: pointer;
-            border: 1px dashed var(--border);
-            transition: var(--transition);
-            position: relative;
-        }
-        .loadstring-box:hover {
-            border-color: #666;
-            background: rgba(255, 255, 255, 0.02);
-        }
-        .loadstring-box .copy-hint {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 10px;
-            color: var(--muted);
-            opacity: 0;
-            transition: var(--transition);
-        }
-        .loadstring-box:hover .copy-hint {
-            opacity: 1;
-        }
-        .script-card .actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 14px;
-            flex-wrap: wrap;
-        }
-        .script-card .actions .btn {
-            font-size: 11px;
-            padding: 6px 14px;
-        }
-
-        /* FORMS */
-        input,
-        textarea,
-        select {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-            font-size: 13px;
-            transition: var(--transition);
-        }
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #666;
-        }
-        textarea {
-            resize: vertical;
-            min-height: 140px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-        }
-        .form-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-        .form-row label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            color: var(--muted);
-        }
-        .form-row input[type="checkbox"] {
-            width: auto;
-            accent-color: #fff;
-            transform: scale(1.1);
-        }
-
-        .panel {
-            display: none;
-        }
-        .panel.active {
-            display: block;
-        }
-        .status-message {
-            font-size: 13px;
-            margin-top: 12px;
-            padding: 10px 16px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        .status-message.success {
-            color: #44ff44;
-            border-left: 3px solid #44ff44;
-        }
-        .status-message.error {
-            color: #ff4444;
-            border-left: 3px solid #ff4444;
-        }
-        .status-message.info {
-            color: #aaa;
-            border-left: 3px solid #555;
-        }
-
-        .empty-state {
-            grid-column: 1/-1;
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--muted);
-        }
-        .empty-state .icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.3;
-        }
-        .empty-state h4 {
-            font-size: 18px;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            padding: 14px 24px;
-            border-radius: 12px;
-            background: #111;
-            border: 1px solid #333;
-            color: var(--text);
-            font-size: 14px;
-            font-weight: 500;
-            box-shadow: var(--shadow);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: var(--transition);
-            z-index: 999;
-            max-width: 400px;
-        }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast.success {
-            border-color: #44ff44;
-        }
-        .toast.error {
-            border-color: #ff4444;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                padding: 20px;
-            }
-            .main {
-                padding: 20px;
-                height: auto;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root { --bg:#000; --card:#0a0a0a; --border:rgba(255,255,255,0.08); --text:#fff; --muted:#666; --radius:12px; --shadow:0 8px 32px rgba(0,0,0,0.8); --transition:0.25s cubic-bezier(0.4,0,0.2,1); }
+        body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; display:flex; justify-content:center; align-items:center; }
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-thumb { background:#333; border-radius:10px; }
+        .auth-container { width:100%; max-width:420px; padding:20px; }
+        .auth-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:40px; box-shadow:var(--shadow); }
+        .auth-box .logo { font-size:28px; font-weight:800; text-align:center; margin-bottom:8px; color:#fff; }
+        .auth-box .logo span { color:var(--muted); font-weight:400; }
+        .auth-box .subtitle { text-align:center; color:var(--muted); font-size:14px; margin-bottom:32px; }
+        .form-group { margin-bottom:18px; }
+        .form-group label { display:block; font-size:13px; font-weight:500; color:var(--muted); margin-bottom:6px; }
+        .form-group input { width:100%; background:rgba(0,0,0,0.6); border:1px solid var(--border); color:var(--text); padding:12px 16px; border-radius:10px; font-family:'Inter',sans-serif; font-size:14px; transition:var(--transition); }
+        .form-group input:focus { outline:none; border-color:#666; }
+        .btn { width:100%; padding:14px; border-radius:10px; font-weight:600; font-size:14px; border:none; cursor:pointer; transition:var(--transition); font-family:'Inter',sans-serif; }
+        .btn-primary { background:#fff; color:#000; }
+        .btn-primary:hover { background:#ddd; transform:translateY(-1px); }
+        .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+        .btn-outline:hover { border-color:#fff; color:#fff; background:rgba(255,255,255,0.04); }
+        .auth-toggle { text-align:center; margin-top:20px; color:var(--muted); font-size:14px; }
+        .auth-toggle a { color:#fff; cursor:pointer; text-decoration:none; border-bottom:1px solid #333; }
+        .auth-toggle a:hover { border-bottom-color:#fff; }
+        .error-msg { color:#ff4444; font-size:13px; margin-top:8px; display:none; }
+        .success-msg { color:#44ff44; font-size:13px; margin-top:8px; display:none; }
+        .app-hidden { display:none !important; }
+        .app-container { width:100%; max-width:1400px; padding:20px; margin:0 auto; }
+        .app-layout { display:flex; gap:24px; min-height:100vh; }
+        .sidebar { width:260px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px 20px; height:fit-content; position:sticky; top:20px; flex-shrink:0; }
+        .sidebar .logo { font-size:20px; font-weight:800; margin-bottom:32px; color:#fff; }
+        .sidebar .logo span { font-weight:400; color:var(--muted); font-size:14px; }
+        .sidebar .user-info { padding:12px 0; border-bottom:1px solid var(--border); margin-bottom:20px; }
+        .sidebar .user-info .email { font-size:13px; color:var(--muted); word-break:break-all; }
+        .sidebar .user-info .status { font-size:12px; color:#44ff44; margin-top:4px; }
+        .sidebar nav a { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:10px; color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; transition:var(--transition); cursor:pointer; }
+        .sidebar nav a:hover { background:rgba(255,255,255,0.04); color:var(--text); }
+        .sidebar nav a.active { background:rgba(255,255,255,0.06); color:#fff; }
+        .sidebar nav a .badge-nav { margin-left:auto; background:rgba(255,255,255,0.06); color:var(--muted); font-size:10px; padding:2px 10px; border-radius:20px; font-weight:700; }
+        .sidebar .bottom { border-top:1px solid var(--border); padding-top:20px; margin-top:20px; }
+        .sidebar .bottom a { color:var(--muted); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:10px; transition:var(--transition); cursor:pointer; }
+        .sidebar .bottom a:hover { background:rgba(255,255,255,0.04); color:#ff4444; }
+        .main-content { flex:1; min-width:0; }
+        .topbar { display:flex; justify-content:space-between; align-items:center; padding-bottom:20px; border-bottom:1px solid var(--border); margin-bottom:28px; flex-wrap:wrap; gap:12px; }
+        .topbar h2 { font-size:22px; font-weight:700; color:#fff; }
+        .domain-badge { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:20px; padding:4px 16px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+        .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:24px; }
+        .card .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px; }
+        .card .header h3 { font-size:16px; font-weight:600; color:#fff; display:flex; align-items:center; gap:10px; }
+        .card .header h3 .count { font-size:12px; font-weight:500; color:var(--muted); background:rgba(255,255,255,0.04); padding:2px 12px; border-radius:20px; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+        .script-card { padding:18px; background:rgba(0,0,0,0.4); border:1px solid var(--border); border-radius:var(--radius); transition:var(--transition); }
+        .script-card:hover { border-color:#444; transform:translateY(-2px); }
+        .script-card .name { font-weight:600; font-size:15px; color:#fff; margin-bottom:4px; }
+        .script-card .id { color:var(--muted); font-size:11px; font-family:'JetBrains Mono',monospace; margin-bottom:10px; }
+        .badge { font-size:10px; font-weight:600; padding:3px 12px; border-radius:20px; display:inline-block; }
+        .badge-active { background:rgba(68,255,68,0.1); color:#44ff44; }
+        .badge-disabled { background:rgba(255,68,68,0.1); color:#ff4444; }
+        .badge-ffa { background:rgba(255,255,68,0.1); color:#ffff44; }
+        .badge-compressed { background:rgba(255,255,255,0.05); color:#aaa; }
+        .loadstring-box { background:rgba(0,0,0,0.6); border-radius:8px; padding:8px 12px; font-family:'JetBrains Mono',monospace; font-size:10px; color:#aaa; word-break:break-all; margin:10px 0; cursor:pointer; border:1px dashed var(--border); transition:var(--transition); position:relative; }
+        .loadstring-box:hover { border-color:#666; }
+        .loadstring-box .copy-hint { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:9px; color:var(--muted); opacity:0; transition:var(--transition); }
+        .loadstring-box:hover .copy-hint { opacity:1; }
+        .script-card .actions { display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+        .btn-sm { padding:5px 12px; font-size:10px; border-radius:8px; border:none; cursor:pointer; transition:var(--transition); font-family:'Inter',sans-serif; font-weight:600; }
+        .btn-sm-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+        .btn-sm-outline:hover { border-color:#fff; color:#fff; }
+        .btn-sm-danger { background:rgba(255,68,68,0.08); color:#ff4444; border:1px solid rgba(255,68,68,0.15); }
+        .btn-sm-danger:hover { background:rgba(255,68,68,0.15); }
+        .btn-sm-success { background:rgba(68,255,68,0.08); color:#44ff44; border:1px solid rgba(68,255,68,0.15); }
+        .btn-sm-success:hover { background:rgba(68,255,68,0.15); }
+        .btn-sm-primary { background:#fff; color:#000; }
+        .btn-sm-primary:hover { background:#ddd; }
+        .panel { display:none; }
+        .panel.active { display:block; }
+        .empty-state { grid-column:1/-1; text-align:center; padding:50px 20px; color:var(--muted); }
+        .empty-state .icon { font-size:40px; margin-bottom:12px; opacity:0.3; }
+        .empty-state h4 { font-size:16px; color:var(--text); margin-bottom:6px; }
+        .form-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+        .form-row label { display:flex; align-items:center; gap:6px; font-size:13px; cursor:pointer; color:var(--muted); }
+        .form-row input[type="checkbox"] { width:auto; accent-color:#fff; transform:scale(1.1); }
+        input, textarea, select { width:100%; background:rgba(0,0,0,0.6); border:1px solid var(--border); color:var(--text); padding:11px 14px; border-radius:10px; font-family:'Inter',sans-serif; font-size:13px; transition:var(--transition); }
+        input:focus, textarea:focus, select:focus { outline:none; border-color:#666; }
+        textarea { resize:vertical; min-height:120px; font-family:'JetBrains Mono',monospace; font-size:12px; }
+        .status-message { font-size:13px; margin-top:12px; padding:10px 16px; border-radius:10px; background:rgba(0,0,0,0.3); }
+        .status-message.success { color:#44ff44; border-left:3px solid #44ff44; }
+        .status-message.error { color:#ff4444; border-left:3px solid #ff4444; }
+        .status-message.info { color:#aaa; border-left:3px solid #555; }
+        .toast { position:fixed; bottom:30px; right:30px; padding:14px 24px; border-radius:12px; background:#111; border:1px solid #333; color:var(--text); font-size:14px; font-weight:500; box-shadow:var(--shadow); transform:translateY(100px); opacity:0; transition:var(--transition); z-index:999; max-width:400px; }
+        .toast.show { transform:translateY(0); opacity:1; }
+        .toast.success { border-color:#44ff44; }
+        .toast.error { border-color:#ff4444; }
+        @media (max-width:768px) { .app-layout { flex-direction:column; } .sidebar { width:100%; position:relative; top:0; } .auth-box { padding:28px 20px; } .grid { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar">
-        <div class="logo">Kers0ne <span>Protection</span></div>
-        <nav>
-            <a class="active" data-panel="panel-scripts">📜 Scripts <span class="badge-nav" id="scriptCount">0</span></a>
-            <a data-panel="panel-obfuscator">🔮 Obfuscator</a>
-            <a data-panel="panel-keys">🔑 Keys <span class="badge-nav" id="keyCount">0</span></a>
-            <a data-panel="panel-hwids">🚫 HWID Bans <span class="badge-nav" id="hwidCount">0</span></a>
-        </nav>
-        <div class="bottom">
-            <a onclick="resetAllData()">🗑️ Reset All Data</a>
-        </div>
-    </div>
+    <!-- ===== AUTH ===== -->
+    <div id="authContainer" class="auth-container">
+        <div class="auth-box">
+            <div class="logo">Kers0ne<span>Protection</span></div>
+            <div class="subtitle" id="authSubtitle">Sign in to access your scripts</div>
 
-    <!-- ===== MAIN ===== -->
-    <div class="main">
-        <div class="topbar">
-            <div class="topbar-left">
-                <h2 id="pageTitle">Scripts</h2>
-                <span class="domain-badge" id="domainDisplay">🌐 Loading...</span>
+            <div id="loginForm">
+                <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com" /></div>
+                <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" /></div>
+                <div id="loginError" class="error-msg"></div>
+                <button class="btn btn-primary" onclick="handleLogin()">Sign In</button>
+                <div class="auth-toggle">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
             </div>
-            <div class="user">
-                <div class="avatar">K</div>
-                <div>
-                    <div class="name">Kers0ne</div>
-                    <div class="tag" id="userTag">Active</div>
-                </div>
-            </div>
-        </div>
 
-        <!-- ===== PANEL: SCRIPTS ===== -->
-        <div id="panel-scripts" class="panel active">
-            <div class="card">
-                <div class="header">
-                    <h3>Your Scripts <span class="count" id="scriptCountDisplay">0</span></h3>
-                    <button class="btn btn-primary" onclick="showPanel('panel-obfuscator')">＋ New Script</button>
-                </div>
-                <div id="scriptsList" class="grid"></div>
+            <div id="signupForm" style="display:none;">
+                <div class="form-group"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com" /></div>
+                <div class="form-group"><label>Password</label><input type="password" id="signupPassword" placeholder="•••••••• (min 6 chars)" /></div>
+                <div class="form-group"><label>Confirm Password</label><input type="password" id="signupConfirm" placeholder="••••••••" /></div>
+                <div id="signupError" class="error-msg"></div>
+                <button class="btn btn-primary" onclick="handleSignup()">Create Account</button>
+                <div class="auth-toggle">Already have an account? <a onclick="showLogin()">Sign in</a></div>
             </div>
-        </div>
 
-        <!-- ===== PANEL: OBFUSCATOR ===== -->
-        <div id="panel-obfuscator" class="panel">
-            <div class="card">
-                <div class="header">
-                    <h3>🔮 Obfuscate Script</h3>
-                    <button class="btn btn-outline" onclick="showPanel('panel-scripts')">← Back</button>
+            <div id="verificationPending" style="display:none;">
+                <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+                    <span style="font-size:32px;display:block;margin-bottom:8px;">📧</span>
+                    <h4>Verify Your Email</h4>
+                    <p style="color:var(--muted);font-size:13px;">We've sent a verification link to <strong id="verifyEmailDisplay"></strong></p>
+                    <p style="font-size:12px;color:#ff4444;margin-top:8px;">⚠️ Check your spam folder</p>
+                    <button style="background:transparent;border:1px solid #333;color:#fff;padding:6px 20px;border-radius:8px;cursor:pointer;font-size:12px;margin-top:10px;" onclick="resendVerification()">Resend</button>
+                    <button style="background:transparent;border:1px solid #ff4444;color:#ff4444;padding:6px 20px;border-radius:8px;cursor:pointer;font-size:12px;margin-top:10px;margin-left:8px;" onclick="handleLogout()">Logout</button>
                 </div>
-                <input type="text" id="scriptName" placeholder="Script Name (e.g. My Hub)" />
-                <textarea id="scriptInput" placeholder="-- Paste your Lua script here..."></textarea>
-                <div class="form-row">
-                    <label><input type="checkbox" id="ffaMode" /> FFA Mode</label>
-                    <label><input type="checkbox" id="compressMode" /> Compress</label>
-                    <label><input type="checkbox" id="keyProtected" /> Key Protected</label>
-                </div>
-                <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-                    <button class="btn btn-primary" onclick="obfuscateScript()">🔮 Obfuscate & Save</button>
-                    <button class="btn btn-outline" onclick="clearFields()">Clear</button>
-                    <button class="btn btn-outline" onclick="copyOutput()">📋 Copy Output</button>
-                </div>
-                <div id="obfuscateStatus" class="status-message info">Ready to obfuscate.</div>
-                <textarea id="scriptOutput" style="margin-top:12px;min-height:140px;font-family:'JetBrains Mono',monospace;font-size:12px" placeholder="Obfuscated output will appear here..." readonly></textarea>
-            </div>
-        </div>
-
-        <!-- ===== PANEL: KEYS ===== -->
-        <div id="panel-keys" class="panel">
-            <div class="card">
-                <div class="header">
-                    <h3>🔑 Your Keys <span class="count" id="keyCountDisplay">0</span></h3>
-                    <button class="btn btn-primary" onclick="generateKey()">＋ Generate Key</button>
-                </div>
-                <div id="keysList" class="grid"></div>
-            </div>
-        </div>
-
-        <!-- ===== PANEL: HWID BANS ===== -->
-        <div id="panel-hwids" class="panel">
-            <div class="card">
-                <div class="header">
-                    <h3>🚫 Banned HWIDs <span class="count" id="hwidCountDisplay">0</span></h3>
-                    <button class="btn btn-danger" onclick="addHwid()">＋ Add HWID Ban</button>
-                </div>
-                <div id="hwidList" class="grid"></div>
             </div>
         </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
-    <div id="toast" class="toast"></div>
+    <!-- ===== APP ===== -->
+    <div id="appContainer" class="app-container app-hidden">
+        <div class="app-layout">
+            <div class="sidebar">
+                <div class="logo">Kers0ne<span>Protection</span></div>
+                <div class="user-info">
+                    <div class="email" id="appUserEmail">user@example.com</div>
+                    <div class="status">✅ Verified</div>
+                </div>
+                <nav>
+                    <a class="active" data-panel="panel-scripts">📜 Scripts <span class="badge-nav" id="appScriptCount">0</span></a>
+                    <a data-panel="panel-obfuscator">🔮 Obfuscator</a>
+                    <a data-panel="panel-keys">🔑 Keys <span class="badge-nav" id="appKeyCount">0</span></a>
+                    <a data-panel="panel-hwids">🚫 HWID Bans <span class="badge-nav" id="appHwidCount">0</span></a>
+                </nav>
+                <div class="bottom"><a onclick="handleLogout()">🚪 Logout</a></div>
+            </div>
+
+            <div class="main-content">
+                <div class="topbar">
+                    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+                        <h2 id="appPageTitle">Scripts</h2>
+                        <span class="domain-badge" id="appDomainDisplay">🌐 Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Scripts -->
+                <div id="panel-scripts" class="panel active">
+                    <div class="card">
+                        <div class="header">
+                            <h3>Your Scripts <span class="count" id="appScriptCountDisplay">0</span></h3>
+                            <button class="btn-sm btn-sm-primary" onclick="showPanel('panel-obfuscator')">＋ New Script</button>
+                        </div>
+                        <div id="appScriptsList" class="grid"></div>
+                    </div>
+                </div>
+
+                <!-- Obfuscator -->
+                <div id="panel-obfuscator" class="panel">
+                    <div class="card">
+                        <div class="header">
+                            <h3>🔮 Obfuscate Script</h3>
+                            <button class="btn-sm btn-sm-outline" onclick="showPanel('panel-scripts')">← Back</button>
+                        </div>
+                        <input type="text" id="appScriptName" placeholder="Script Name" />
+                        <textarea id="appScriptInput" placeholder="-- Paste your Lua script here..."></textarea>
+                        <div class="form-row">
+                            <label><input type="checkbox" id="appFfaMode" /> FFA Mode</label>
+                            <label><input type="checkbox" id="appCompressMode" /> Compress</label>
+                            <label><input type="checkbox" id="appKeyProtected" /> Key Protected</label>
+                        </div>
+                        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+                            <button class="btn-sm btn-sm-primary" onclick="appObfuscate()">🔮 Obfuscate & Save</button>
+                            <button class="btn-sm btn-sm-outline" onclick="appClearFields()">Clear</button>
+                            <button class="btn-sm btn-sm-outline" onclick="appCopyOutput()">📋 Copy</button>
+                        </div>
+                        <div id="appObfuscateStatus" class="status-message info">Ready to obfuscate.</div>
+                        <textarea id="appScriptOutput" style="margin-top:12px;min-height:120px;font-family:'JetBrains Mono',monospace;font-size:12px;" placeholder="Obfuscated output..." readonly></textarea>
+                    </div>
+                </div>
+
+                <!-- Keys -->
+                <div id="panel-keys" class="panel">
+                    <div class="card">
+                        <div class="header">
+                            <h3>🔑 Your Keys <span class="count" id="appKeyCountDisplay">0</span></h3>
+                            <button class="btn-sm btn-sm-primary" onclick="appGenerateKey()">＋ Generate Key</button>
+                        </div>
+                        <div id="appKeysList" class="grid"></div>
+                    </div>
+                </div>
+
+                <!-- HWIDs -->
+                <div id="panel-hwids" class="panel">
+                    <div class="card">
+                        <div class="header">
+                            <h3>🚫 Banned HWIDs <span class="count" id="appHwidCountDisplay">0</span></h3>
+                            <button class="btn-sm btn-sm-danger" onclick="appAddHwid()">＋ Add HWID Ban</button>
+                        </div>
+                        <div id="appHwidList" class="grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="appToast" class="toast"></div>
 
     <script>
         // ============================================
-        // 🐱 CAT'S PRODUCTION ENGINE - MONOCHROME
+        // COMPLETE JAVASCRIPT
         // ============================================
 
-        // --- STORAGE KEYS ---
-        const STORAGE_KEYS = {
+        const STORAGE = {
+            users: 'kers0ne_users',
+            session: 'kers0ne_session',
             scripts: 'kers0ne_scripts',
             keys: 'kers0ne_keys',
             hwids: 'kers0ne_hwids'
         };
 
-        // --- DATA LAYER ---
-        function loadData(key) {
-            try {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : [];
-            } catch {
-                return [];
-            }
-        }
+        function loadData(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } }
 
-        function saveData(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
-        }
+        function saveData(k, d) { localStorage.setItem(k, JSON.stringify(d)); }
 
-        function getScripts() { return loadData(STORAGE_KEYS.scripts); }
+        function getUsers() { return loadData(STORAGE.users); }
 
-        function setScripts(data) { saveData(STORAGE_KEYS.scripts, data); }
+        function setUsers(d) { saveData(STORAGE.users, d); }
 
-        function getKeys() { return loadData(STORAGE_KEYS.keys); }
+        function getSession() { try { return JSON.parse(localStorage.getItem(STORAGE.session)); } catch { return null; } }
 
-        function setKeys(data) { saveData(STORAGE_KEYS.keys, data); }
+        function setSession(d) { localStorage.setItem(STORAGE.session, JSON.stringify(d)); }
 
-        function getHwids() { return loadData(STORAGE_KEYS.hwids); }
+        function clearSession() { localStorage.removeItem(STORAGE.session); }
 
-        function setHwids(data) { saveData(STORAGE_KEYS.hwids, data); }
+        function getScripts() { return loadData(STORAGE.scripts); }
 
-        // --- ID GENERATION ---
-        function generateId() {
-            return 'script_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6);
-        }
+        function setScripts(d) { saveData(STORAGE.scripts, d); }
+
+        function getKeys() { return loadData(STORAGE.keys); }
+
+        function setKeys(d) { saveData(STORAGE.keys, d); }
+
+        function getHwids() { return loadData(STORAGE.hwids); }
+
+        function setHwids(d) { saveData(STORAGE.hwids, d); }
+
+        function generateId() { return 'script_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6); }
 
         function generateKey() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let key = '';
+            const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let k = '';
             for (let i = 0; i < 16; i++) {
-                if (i > 0 && i % 4 === 0) key += '-';
-                key += chars.charAt(Math.floor(Math.random() * chars.length));
+                if (i > 0 && i % 4 === 0) k += '-';
+                k += c.charAt(Math.floor(Math.random() * c.length));
             }
-            return key;
+            return k;
         }
 
-        // --- DOMAIN DETECTION ---
-        function getBaseDomain() {
-            return window.location.origin.replace(/\/$/, '');
-        }
+        function getBaseDomain() { return window.location.origin.replace(/\/$/, ''); }
 
-        function getLoadstringUrl(scriptId) {
-            return getBaseDomain() + '/raw/' + scriptId;
-        }
+        function getLoadstringUrl(id) { return getBaseDomain() + '/raw/' + id; }
 
-        // --- TOAST SYSTEM ---
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast ' + type + ' show';
+        function escHtml(s) { const d = document.createElement('div');
+            d.textContent = s; return d.innerHTML; }
+
+        function showToast(m, t = 'success') {
+            const toast = document.getElementById('appToast');
+            toast.textContent = m;
+            toast.className = 'toast ' + t + ' show';
             clearTimeout(toast._timer);
-            toast._timer = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // --- ESCAPE HTML ---
-        function escHtml(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('verificationPending').style.display = 'none';
+            document.getElementById('authSubtitle').textContent = 'Sign in to access your scripts';
         }
 
-        // --- RESET ALL DATA ---
-        window.resetAllData = function() {
-            if (!confirm('⚠️ Delete ALL data (scripts, keys, HWIDs)? This cannot be undone!')) return;
-            localStorage.removeItem(STORAGE_KEYS.scripts);
-            localStorage.removeItem(STORAGE_KEYS.keys);
-            localStorage.removeItem(STORAGE_KEYS.hwids);
+        function showSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+            document.getElementById('verificationPending').style.display = 'none';
+            document.getElementById('authSubtitle').textContent = 'Create your account';
+        }
+
+        function setAuthMessage(id, msg, type) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.style.display = 'block';
+            el.className = type === 'error' ? 'error-msg' : 'success-msg';
+        }
+
+        function clearAuthMessages() {
+            ['loginError', 'signupError'].forEach(id => {
+                const el = document.getElementById(id);
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+        }
+
+        function handleSignup() {
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('signupConfirm').value;
+            clearAuthMessages();
+
+            if (!email || !password || !confirm) { setAuthMessage('signupError', 'All fields required.', 'error'); return; }
+            if (!email.includes('@')) { setAuthMessage('signupError', 'Valid email required.', 'error'); return; }
+            if (password.length < 6) { setAuthMessage('signupError', 'Password min 6 chars.', 'error'); return; }
+            if (password !== confirm) { setAuthMessage('signupError', 'Passwords do not match.', 'error'); return; }
+
+            let users = getUsers();
+            if (users.find(u => u.email === email)) { setAuthMessage('signupError', 'Email already registered.',
+                'error'); return; }
+
+            const token = generateKey();
+            users.push({ email, password, verified: false, token, created: new Date().toISOString() });
+            setUsers(users);
+
+            document.getElementById('verifyEmailDisplay').textContent = email;
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('verificationPending').style.display = 'block';
+            document.getElementById('authSubtitle').textContent = 'Verify your email';
+            showToast('Verification email sent! Check spam.', 'success');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const users = getUsers();
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (!user) {
+                document.getElementById('loginError').textContent = 'Invalid email or password.';
+                document.getElementById('loginError').style.display = 'block';
+                return;
+            }
+
+            if (!user.verified) {
+                document.getElementById('verifyEmailDisplay').textContent = email;
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('verificationPending').style.display = 'block';
+                document.getElementById('authSubtitle').textContent = 'Verify your email';
+                showToast('Please verify your email first.', 'error');
+                return;
+            }
+
+            setSession({ email: user.email, token: user.token, loginTime: Date.now() });
+            showApp();
+        }
+
+        function resendVerification() {
+            const email = document.getElementById('verifyEmailDisplay').textContent;
+            if (email && email !== '') {
+                showToast('Verification resent! Check spam.', 'success');
+            } else {
+                showToast('No email to resend.', 'error');
+            }
+        }
+
+        function handleLogout() {
+            clearSession();
+            document.getElementById('authContainer').style.display = 'block';
+            document.getElementById('appContainer').classList.add('app-hidden');
+            showLogin();
+            showToast('Logged out.', 'success');
+        }
+
+        function checkSession() {
+            const session = getSession();
+            if (session) {
+                const users = getUsers();
+                const user = users.find(u => u.email === session.email && u.token === session.token);
+                if (user && user.verified) { showApp(); return; }
+            }
+            document.getElementById('authContainer').style.display = 'block';
+            document.getElementById('appContainer').classList.add('app-hidden');
+        }
+
+        function showApp() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').classList.remove('app-hidden');
+            const session = getSession();
+            if (session) { document.getElementById('appUserEmail').textContent = session.email; }
+            document.getElementById('appDomainDisplay').textContent = '🌐 ' + getBaseDomain();
             renderScripts();
             renderKeys();
             renderHwids();
-            showToast('All data wiped', 'error');
-        };
+        }
 
-        // --- RENDER SCRIPTS ---
         function renderScripts() {
             const scripts = getScripts();
-            const container = document.getElementById('scriptsList');
-            const countDisplay = document.getElementById('scriptCountDisplay');
-            const badge = document.getElementById('scriptCount');
-
-            countDisplay.textContent = scripts.length;
+            const container = document.getElementById('appScriptsList');
+            const count = document.getElementById('appScriptCountDisplay');
+            const badge = document.getElementById('appScriptCount');
+            count.textContent = scripts.length;
             badge.textContent = scripts.length;
 
             if (!scripts.length) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📜</div>
-                        <h4>No Scripts Yet</h4>
-                        <p style="color:var(--muted);font-size:14px">Create your first script using the Obfuscator.</p>
-                    </div>
-                `;
+                container.innerHTML =
+                    '<div class="empty-state"><div class="icon">📜</div><h4>No Scripts Yet</h4><p style="color:var(--muted);font-size:14px">Create your first script.</p></div>';
                 return;
             }
 
             let html = '';
             for (const s of scripts) {
                 const statusClass = s.status === 'active' ? 'badge-active' : 'badge-disabled';
-                const loadstring = `loadstring(game:HttpGet("${getLoadstringUrl(s.id)}"))()`;
-
-                html += `
-                    <div class="script-card">
-                        <div class="name">${escHtml(s.name)}</div>
-                        <div class="id">ID: ${s.id}</div>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
-                            <span class="badge ${statusClass}">${s.status}</span>
-                            ${s.ffa ? '<span class="badge badge-ffa">FFA</span>' : ''}
-                            ${s.compressed ? '<span class="badge badge-compressed">Compressed</span>' : ''}
-                            ${s.keyProtected ? '<span class="badge" style="background:rgba(255,255,255,0.05);color:#aaa">🔑 Key</span>' : ''}
-                        </div>
-                        <div class="loadstring-box" onclick="copyLoadstring(this)">
-                            ${loadstring}
-                            <span class="copy-hint">📋 Click to copy</span>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-outline btn-sm" onclick="editScript('${s.id}')">✏️ Edit</button>
-                            <button class="btn btn-outline btn-sm" onclick="toggleScript('${s.id}')">${s.status === 'active' ? '⏸️ Disable' : '▶️ Enable'}</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteScript('${s.id}')">🗑️ Delete</button>
-                            <button class="btn btn-outline btn-sm" onclick="viewRaw('${s.id}')">📄 Raw</button>
-                        </div>
-                    </div>
-                `;
+                const ls = 'loadstring(game:HttpGet("' + getLoadstringUrl(s.id) + '"))()';
+                html += '<div class="script-card"><div class="name">' + escHtml(s.name) + '</div><div class="id">ID: ' + s.id +
+                    '</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><span class="badge ' +
+                    statusClass + '">' + s.status + '</span>' + (s.ffa ?
+                    '<span class="badge badge-ffa">FFA</span>' : '') + (s.compressed ?
+                    '<span class="badge badge-compressed">Compressed</span>' : '') +
+                    '</div><div class="loadstring-box" onclick="copyLoadstring(this)">' + ls +
+                    '<span class="copy-hint">📋 Click</span></div><div class="actions"><button class="btn-sm btn-sm-outline" onclick="editScript(\'' +
+                    s.id + '\')">✏️ Edit</button><button class="btn-sm btn-sm-outline" onclick="toggleScript(\'' + s.id +
+                    '\')">' + (s.status === 'active' ? '⏸️ Disable' : '▶️ Enable') +
+                    '</button><button class="btn-sm btn-sm-danger" onclick="deleteScript(\'' + s.id +
+                    '\')">🗑️</button></div></div>';
             }
             container.innerHTML = html;
         }
 
-        // --- RENDER KEYS ---
         function renderKeys() {
             const keys = getKeys();
-            const container = document.getElementById('keysList');
-            const countDisplay = document.getElementById('keyCountDisplay');
-            const badge = document.getElementById('keyCount');
-
-            countDisplay.textContent = keys.length;
+            const container = document.getElementById('appKeysList');
+            const count = document.getElementById('appKeyCountDisplay');
+            const badge = document.getElementById('appKeyCount');
+            count.textContent = keys.length;
             badge.textContent = keys.length;
 
             if (!keys.length) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">🔑</div>
-                        <h4>No Keys Generated</h4>
-                        <p style="color:var(--muted);font-size:14px">Generate keys to protect your scripts.</p>
-                    </div>
-                `;
+                container.innerHTML =
+                '<div class="empty-state"><div class="icon">🔑</div><h4>No Keys</h4></div>';
                 return;
             }
 
             let html = '';
             for (const k of keys) {
-                html += `
-                    <div class="script-card">
-                        <div style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#fff;font-weight:700">${k.key}</div>
-                        <div style="font-size:12px;color:var(--muted)">Expires: ${k.expires || 'Never'}</div>
-                        <div style="font-size:12px;margin-top:4px;color:${k.used ? '#ff4444' : '#44ff44'}">${k.used ? '❌ Used' : '✅ Available'}</div>
-                        <div style="font-size:11px;color:var(--muted);margin-top:4px">Used by: ${k.usedBy || '—'}</div>
-                        <button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteKey('${k.key}')">🗑️ Delete</button>
-                    </div>
-                `;
+                html += '<div class="script-card"><div style="font-family:monospace;font-size:14px;color:#fff;font-weight:700">' +
+                    k.key + '</div><div style="font-size:12px;color:var(--muted)">Expires: ' + (k.expires || 'Never') +
+                    '</div><div style="font-size:12px;margin-top:4px;color:' + (k.used ? '#ff4444' : '#44ff44') + '">' + (k
+                    .used ? '❌ Used' : '✅ Available') +
+                    '</div><button class="btn-sm btn-sm-danger" style="margin-top:10px" onclick="deleteKey(\'' + k.key +
+                    '\')">🗑️</button></div>';
             }
             container.innerHTML = html;
         }
 
-        // --- RENDER HWIDS ---
         function renderHwids() {
             const hwids = getHwids();
-            const container = document.getElementById('hwidList');
-            const countDisplay = document.getElementById('hwidCountDisplay');
-            const badge = document.getElementById('hwidCount');
-
-            countDisplay.textContent = hwids.length;
+            const container = document.getElementById('appHwidList');
+            const count = document.getElementById('appHwidCountDisplay');
+            const badge = document.getElementById('appHwidCount');
+            count.textContent = hwids.length;
             badge.textContent = hwids.length;
 
             if (!hwids.length) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">🚫</div>
-                        <h4>No Banned HWIDs</h4>
-                        <p style="color:var(--muted);font-size:14px">Add HWIDs to ban specific users.</p>
-                    </div>
-                `;
+                container.innerHTML =
+                    '<div class="empty-state"><div class="icon">🚫</div><h4>No Banned HWIDs</h4></div>';
                 return;
             }
 
             let html = '';
             for (const h of hwids) {
-                html += `
-                    <div class="script-card">
-                        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ff4444;font-weight:700">${escHtml(h.hwid)}</div>
-                        <div style="font-size:12px;color:var(--muted)">${escHtml(h.reason || 'No reason provided')}</div>
-                        <div style="font-size:11px;color:var(--muted);margin-top:4px">Banned: ${h.date || 'Unknown'}</div>
-                        <button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="unbanHwid('${h.hwid}')">🔓 Unban</button>
-                    </div>
-                `;
+                html += '<div class="script-card"><div style="font-family:monospace;font-size:13px;color:#ff4444;font-weight:700">' +
+                    escHtml(h.hwid) + '</div><div style="font-size:12px;color:var(--muted)">' + escHtml(h.reason ||
+                    'No reason') +
+                    '</div><button class="btn-sm btn-sm-outline" style="margin-top:10px" onclick="unbanHwid(\'' + h.hwid +
+                    '\')">🔓 Unban</button></div>';
             }
             container.innerHTML = html;
         }
 
-        // --- SCRIPT OPERATIONS ---
         window.toggleScript = function(id) {
             const scripts = getScripts();
-            const script = scripts.find(s => s.id === id);
-            if (script) {
-                script.status = script.status === 'active' ? 'disabled' : 'active';
+            const s = scripts.find(x => x.id === id);
+            if (s) {
+                s.status = s.status === 'active' ? 'disabled' : 'active';
                 setScripts(scripts);
                 renderScripts();
-                showToast(`Script ${script.status === 'active' ? 'enabled' : 'disabled'}`, 'success');
+                showToast('Script ' + (s.status === 'active' ? 'enabled' : 'disabled'), 'success');
             }
-        };
+        }
 
         window.deleteScript = function(id) {
-            if (!confirm('Delete this script permanently?')) return;
+            if (!confirm('Delete?')) return;
             let scripts = getScripts();
             scripts = scripts.filter(s => s.id !== id);
             setScripts(scripts);
             renderScripts();
-            showToast('Script deleted', 'success');
-        };
+            showToast('Deleted', 'success');
+        }
 
         window.editScript = function(id) {
             const scripts = getScripts();
-            const script = scripts.find(s => s.id === id);
-            if (!script) return;
-            document.getElementById('scriptName').value = script.name;
-            document.getElementById('scriptInput').value = script.originalCode || script.obfuscated || '';
-            document.getElementById('ffaMode').checked = script.ffa || false;
-            document.getElementById('compressMode').checked = script.compressed || false;
-            document.getElementById('keyProtected').checked = script.keyProtected || false;
-            document.getElementById('scriptOutput').value = '';
+            const s = scripts.find(x => x.id === id);
+            if (!s) return;
+            document.getElementById('appScriptName').value = s.name;
+            document.getElementById('appScriptInput').value = s.originalCode || s.obfuscated || '';
+            document.getElementById('appFfaMode').checked = s.ffa || false;
+            document.getElementById('appCompressMode').checked = s.compressed || false;
+            document.getElementById('appScriptOutput').value = '';
+            document.getElementById('appScriptOutput').dataset.editId = id;
             showPanel('panel-obfuscator');
-            document.getElementById('obfuscateStatus').className = 'status-message info';
-            document.getElementById('obfuscateStatus').textContent = 'Editing: ' + script.name;
-            document.getElementById('scriptOutput').dataset.editId = id;
-        };
-
-        window.viewRaw = function(id) {
-            const scripts = getScripts();
-            const script = scripts.find(s => s.id === id);
-            if (!script) {
-                showToast('Script not found', 'error');
-                return;
-            }
-            const rawContent = script.obfuscated || script.originalCode || '-- No content';
-            const win = window.open('', '_blank');
-            if (win) {
-                win.document.write(`<pre style="background:#000;color:#fff;padding:20px;font-family:monospace;font-size:13px;white-space:pre-wrap;word-break:break-all;">${escHtml(rawContent)}</pre>`);
-                win.document.title = `Raw: ${script.name}`;
-            } else {
-                navigator.clipboard.writeText(rawContent);
-                showToast('Raw content copied to clipboard', 'success');
-            }
-        };
+            document.getElementById('appObfuscateStatus').className = 'status-message info';
+            document.getElementById('appObfuscateStatus').textContent = 'Editing: ' + s.name;
+        }
 
         window.copyLoadstring = function(el) {
-            const text = el.textContent.trim().replace('📋 Click to copy', '').trim();
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Loadstring copied!', 'success');
-            }).catch(() => {
-                const range = document.createRange();
-                range.selectNode(el);
+            const text = el.textContent.trim().replace('📋 Click', '').trim();
+            navigator.clipboard.writeText(text).then(() => showToast('Copied!', 'success')).catch(() => {
+                const r = document.createRange();
+                r.selectNode(el);
                 window.getSelection().removeAllRanges();
-                window.getSelection().addRange(range);
+                window.getSelection().addRange(r);
                 document.execCommand('copy');
-                showToast('Loadstring copied!', 'success');
+                showToast('Copied!', 'success');
             });
-        };
+        }
 
-        // --- KEY OPERATIONS ---
-        window.generateKey = function() {
+        window.appGenerateKey = function() {
             const keys = getKeys();
-            const newKey = {
+            keys.push({
                 key: generateKey(),
                 expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
                 used: false,
                 usedBy: null,
                 createdAt: new Date().toISOString()
-            };
-            keys.push(newKey);
+            });
             setKeys(keys);
             renderKeys();
-            showToast('Key generated: ' + newKey.key, 'success');
-        };
+            showToast('Key generated', 'success');
+        }
 
         window.deleteKey = function(key) {
-            if (!confirm('Delete this key?')) return;
+            if (!confirm('Delete key?')) return;
             let keys = getKeys();
             keys = keys.filter(k => k.key !== key);
             setKeys(keys);
             renderKeys();
             showToast('Key deleted', 'success');
-        };
+        }
 
-        // --- HWID OPERATIONS ---
-        window.addHwid = function() {
+        window.appAddHwid = function() {
             const hwid = prompt('Enter HWID to ban:');
             if (!hwid) return;
-            const reason = prompt('Reason for ban (optional):') || 'No reason';
+            const reason = prompt('Reason:') || 'No reason';
             const hwids = getHwids();
-            if (hwids.find(h => h.hwid === hwid)) {
-                showToast('HWID already banned', 'error');
-                return;
-            }
-            hwids.push({
-                hwid: hwid,
-                reason: reason,
-                date: new Date().toLocaleDateString()
-            });
+            if (hwids.find(h => h.hwid === hwid)) { showToast('Already banned', 'error'); return; }
+            hwids.push({ hwid, reason, date: new Date().toLocaleDateString() });
             setHwids(hwids);
             renderHwids();
-            showToast('HWID banned: ' + hwid, 'success');
-        };
+            showToast('HWID banned', 'success');
+        }
 
         window.unbanHwid = function(hwid) {
-            if (!confirm('Unban this HWID?')) return;
+            if (!confirm('Unban?')) return;
             let hwids = getHwids();
             hwids = hwids.filter(h => h.hwid !== hwid);
             setHwids(hwids);
             renderHwids();
-            showToast('HWID unbanned', 'success');
-        };
+            showToast('Unbanned', 'success');
+        }
 
-        // --- OBFUSCATOR ---
         function localObfuscate(code) {
             const key = 0x4B;
             const bytes = new TextEncoder().encode(code);
             const xorred = new Uint8Array(bytes.length);
-            for (let i = 0; i < bytes.length; i++) {
-                xorred[i] = bytes[i] ^ key;
-            }
+            for (let i = 0; i < bytes.length; i++) { xorred[i] = bytes[i] ^ key; }
             let binary = '';
-            for (let i = 0; i < xorred.length; i++) {
-                binary += String.fromCharCode(xorred[i]);
-            }
+            for (let i = 0; i < xorred.length; i++) { binary += String.fromCharCode(xorred[i]); }
             const b64 = btoa(binary);
             const reversed = b64.split('').reverse().join('');
-            return `-- [[ Kers0ne Protected ]]
-local function d(s) local r='' for i=#s,1,-1 do r=r..s:sub(i,i) end return r end
-local function x(s) local t={} for i=1,#s do t[i]=string.char(bit32.bxor(s:byte(i),0x4B)) end return table.concat(t) end
-local decoded = x(d('${reversed}'))
-local fn = loadstring(decoded)
-if fn then fn() else print('Decryption failed') end`;
+            return '-- [[ Kers0ne Protected ]]\nlocal function d(s) local r="" for i=#s,1,-1 do r=r..s:sub(i,i) end return r end\nlocal function x(s) local t={} for i=1,#s do t[i]=string.char(bit32.bxor(s:byte(i),0x4B)) end return table.concat(t) end\nlocal decoded = x(d("' +
+                reversed + '"))\nlocal fn = loadstring(decoded)\nif fn then fn() else print("Decryption failed") end';
         }
 
-        window.obfuscateScript = async function() {
-            const name = document.getElementById('scriptName').value.trim();
-            const code = document.getElementById('scriptInput').value;
-            const status = document.getElementById('obfuscateStatus');
-            const output = document.getElementById('scriptOutput');
+        window.appObfuscate = async function() {
+            const name = document.getElementById('appScriptName').value.trim();
+            const code = document.getElementById('appScriptInput').value;
+            const status = document.getElementById('appObfuscateStatus');
+            const output = document.getElementById('appScriptOutput');
             const editId = output.dataset.editId;
 
-            if (!name) {
-                status.className = 'status-message error';
-                status.textContent = '❌ Please enter a script name.';
-                return;
-            }
-            if (!code.trim()) {
-                status.className = 'status-message error';
-                status.textContent = '❌ Please paste a Lua script to obfuscate.';
-                return;
-            }
+            if (!name) { status.className = 'status-message error';
+                status.textContent = '❌ Enter a name.'; return; }
+            if (!code.trim()) { status.className = 'status-message error';
+                status.textContent = '❌ Paste a script.'; return; }
 
             status.className = 'status-message info';
             status.textContent = '⏳ Obfuscating...';
             output.value = '';
 
             try {
-                const formData = new FormData();
-                const blob = new Blob([code], { type: 'text/plain' });
-                formData.append('file', blob, 'script.lua');
-                formData.append('anti_env_logger', 'true');
-
-                const response = await fetch('https://kers0ne-0bf.lovable.app/api/public/obfuscate', {
-                    method: 'POST',
-                    headers: { 'X-API-Key': 'kers0neontop123' },
-                    body: formData
-                });
-
-                let result;
-                let usedRemote = false;
-                if (response.ok) {
-                    result = await response.text();
-                    usedRemote = true;
-                } else {
-                    result = localObfuscate(code);
-                    status.textContent = '⚠️ Using local obfuscation (remote unavailable)';
-                }
-
+                const result = localObfuscate(code);
                 output.value = result;
-
                 let scripts = getScripts();
-                const ffa = document.getElementById('ffaMode').checked;
-                const compressed = document.getElementById('compressMode').checked;
-                const keyProtected = document.getElementById('keyProtected').checked;
+                const ffa = document.getElementById('appFfaMode').checked;
+                const compressed = document.getElementById('appCompressMode').checked;
 
                 if (editId) {
                     const idx = scripts.findIndex(s => s.id === editId);
@@ -1036,128 +633,68 @@ if fn then fn() else print('Decryption failed') end`;
                         scripts[idx].obfuscated = result;
                         scripts[idx].ffa = ffa;
                         scripts[idx].compressed = compressed;
-                        scripts[idx].keyProtected = keyProtected;
                         scripts[idx].updatedAt = new Date().toISOString();
                         delete output.dataset.editId;
-                        showToast('Script updated!', 'success');
+                        showToast('Updated!', 'success');
                     }
                 } else {
-                    const newScript = {
+                    scripts.unshift({
                         id: generateId(),
-                        name: name,
+                        name,
                         status: 'active',
-                        ffa: ffa,
-                        compressed: compressed,
-                        keyProtected: keyProtected,
+                        ffa,
+                        compressed,
                         originalCode: code,
                         obfuscated: result,
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString()
-                    };
-                    scripts.unshift(newScript);
-                    showToast('Script saved!', 'success');
+                        createdAt: new Date().toISOString()
+                    });
+                    showToast('Saved!', 'success');
                 }
-
                 setScripts(scripts);
                 renderScripts();
-
                 status.className = 'status-message success';
-                status.textContent = usedRemote ? '✅ Obfuscation complete! Script saved.' :
-                    '✅ Local obfuscation complete. Script saved.';
-            } catch (error) {
-                try {
-                    const fallback = localObfuscate(code);
-                    output.value = fallback;
-                    let scripts = getScripts();
-                    const newScript = {
-                        id: generateId(),
-                        name: name,
-                        status: 'active',
-                        ffa: document.getElementById('ffaMode').checked,
-                        compressed: document.getElementById('compressMode').checked,
-                        keyProtected: document.getElementById('keyProtected').checked,
-                        originalCode: code,
-                        obfuscated: fallback,
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString()
-                    };
-                    scripts.unshift(newScript);
-                    setScripts(scripts);
-                    renderScripts();
-                    status.className = 'status-message success';
-                    status.textContent = '✅ Local obfuscation saved.';
-                    showToast('Script saved with local obfuscation', 'success');
-                } catch (e2) {
-                    status.className = 'status-message error';
-                    status.textContent = '❌ Error: ' + e2.message;
-                    showToast('Obfuscation failed', 'error');
-                }
-            }
-        };
-
-        window.clearFields = function() {
-            document.getElementById('scriptName').value = '';
-            document.getElementById('scriptInput').value = '';
-            document.getElementById('scriptOutput').value = '';
-            document.getElementById('scriptOutput').dataset.editId = '';
-            document.getElementById('ffaMode').checked = false;
-            document.getElementById('compressMode').checked = false;
-            document.getElementById('keyProtected').checked = false;
-            document.getElementById('obfuscateStatus').className = 'status-message info';
-            document.getElementById('obfuscateStatus').textContent = 'Ready to obfuscate.';
-        };
-
-        window.copyOutput = function() {
-            const output = document.getElementById('scriptOutput');
-            if (!output.value) {
-                document.getElementById('obfuscateStatus').className = 'status-message error';
-                document.getElementById('obfuscateStatus').textContent = '❌ Nothing to copy. Obfuscate a script first.';
-                return;
-            }
-            navigator.clipboard.writeText(output.value).then(() => {
-                showToast('Output copied!', 'success');
-            }).catch(() => {
-                output.select();
-                document.execCommand('copy');
-                showToast('Output copied!', 'success');
-            });
-        };
-
-        // --- RAW ENDPOINT HANDLER ---
-        function handleRawEndpoint() {
-            const hash = window.location.hash;
-            if (hash.startsWith('#/raw/')) {
-                const id = hash.replace('#/raw/', '');
-                const scripts = getScripts();
-                const script = scripts.find(s => s.id === id);
-                if (script) {
-                    const content = script.obfuscated || script.originalCode || '-- Script not found';
-                    document.body.innerHTML =
-                        `<pre style="background:#000;color:#fff;padding:30px;font-family:monospace;font-size:13px;white-space:pre-wrap;word-break:break-all;min-height:100vh;margin:0;">${escHtml(content)}</pre>`;
-                    document.title = 'Raw: ' + script.name;
-                } else {
-                    document.body.innerHTML =
-                        `<pre style="background:#000;color:#ff4444;padding:30px;font-family:monospace;font-size:16px;">Script not found: ${id}</pre>`;
-                }
+                status.textContent = '✅ Obfuscation complete.';
+            } catch (e) {
+                status.className = 'status-message error';
+                status.textContent = '❌ Error: ' + e.message;
             }
         }
 
-        // --- NAVIGATION ---
-        window.showPanel = function(panelId) {
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(panelId).classList.add('active');
-            document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
-            const link = document.querySelector(`.sidebar nav a[data-panel="${panelId}"]`);
-            if (link) link.classList.add('active');
+        window.appClearFields = function() {
+            document.getElementById('appScriptName').value = '';
+            document.getElementById('appScriptInput').value = '';
+            document.getElementById('appScriptOutput').value = '';
+            document.getElementById('appScriptOutput').dataset.editId = '';
+            document.getElementById('appFfaMode').checked = false;
+            document.getElementById('appCompressMode').checked = false;
+            document.getElementById('appObfuscateStatus').className = 'status-message info';
+            document.getElementById('appObfuscateStatus').textContent = 'Ready to obfuscate.';
+        }
 
-            const titles = {
-                'panel-scripts': 'Scripts',
-                'panel-obfuscator': 'Obfuscator',
-                'panel-keys': 'Keys',
-                'panel-hwids': 'HWID Bans'
-            };
-            document.getElementById('pageTitle').textContent = titles[panelId] || 'Dashboard';
-        };
+        window.appCopyOutput = function() {
+            const output = document.getElementById('appScriptOutput');
+            if (!output.value) {
+                document.getElementById('appObfuscateStatus').className = 'status-message error';
+                document.getElementById('appObfuscateStatus').textContent = '❌ Nothing to copy.';
+                return;
+            }
+            navigator.clipboard.writeText(output.value).then(() => showToast('Copied!', 'success')).catch(() => {
+                output.select();
+                document.execCommand('copy');
+                showToast('Copied!', 'success');
+            });
+        }
+
+        window.showPanel = function(id) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+            const link = document.querySelector('.sidebar nav a[data-panel="' + id + '"]');
+            if (link) link.classList.add('active');
+            const titles = { 'panel-scripts': 'Scripts', 'panel-obfuscator': 'Obfuscator', 'panel-keys': 'Keys',
+                'panel-hwids': 'HWID Bans' };
+            document.getElementById('appPageTitle').textContent = titles[id] || 'Dashboard';
+        }
 
         document.querySelectorAll('.sidebar nav a').forEach(a => {
             a.addEventListener('click', (e) => {
@@ -1166,19 +703,31 @@ if fn then fn() else print('Decryption failed') end`;
             });
         });
 
-        // --- INIT ---
-        document.addEventListener('DOMContentLoaded', function() {
-            const domain = getBaseDomain();
-            document.getElementById('domainDisplay').textContent = '🌐 ' + domain;
+        // Raw endpoint handler
+        function handleRawEndpoint() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#/raw/')) {
+                const id = hash.replace('#/raw/', '');
+                const scripts = getScripts();
+                const s = scripts.find(x => x.id === id);
+                if (s) {
+                    const content = s.obfuscated || s.originalCode || '-- No content';
+                    document.body.innerHTML =
+                        '<pre style="background:#000;color:#fff;padding:30px;font-family:monospace;font-size:13px;white-space:pre-wrap;word-break:break-all;min-height:100vh;margin:0;">' +
+                        escHtml(content) + '</pre>';
+                    document.title = 'Raw: ' + s.name;
+                } else {
+                    document.body.innerHTML =
+                        '<pre style="background:#000;color:#ff4444;padding:30px;font-family:monospace;font-size:16px;">Script not found: ' +
+                        id + '</pre>';
+                }
+            }
+        }
 
+        window.addEventListener('DOMContentLoaded', () => {
             handleRawEndpoint();
-
-            renderScripts();
-            renderKeys();
-            renderHwids();
+            checkSession();
         });
-
-        // Handle hash changes for raw endpoints
         window.addEventListener('hashchange', handleRawEndpoint);
     </script>
 </body>
