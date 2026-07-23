@@ -98,6 +98,10 @@
         .toast.show { transform:translateY(0); opacity:1; }
         .toast.success { border-color:#44ff44; }
         .toast.error { border-color:#ff4444; }
+        /* Raw display mode */
+        .raw-mode { background:#000; color:#fff; padding:30px; font-family:'JetBrains Mono',monospace; font-size:13px; white-space:pre-wrap; word-break:break-all; min-height:100vh; margin:0; }
+        .raw-mode .raw-header { color:#666; font-size:12px; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:20px; display:flex; justify-content:space-between; }
+        .raw-mode .raw-header span { color:#44ff44; }
         @media (max-width:768px) { .app-layout { flex-direction:column; } .sidebar { width:100%; position:relative; top:0; } .auth-box { padding:28px 20px; } .grid { grid-template-columns:1fr; } }
     </style>
 </head>
@@ -229,7 +233,7 @@
 
     <script>
         // ============================================
-        // COMPLETE JAVASCRIPT
+        // COMPLETE JAVASCRIPT - AUTO RAW DISPLAY
         // ============================================
 
         const STORAGE = {
@@ -280,7 +284,7 @@
 
         function getBaseDomain() { return window.location.origin.replace(/\/$/, ''); }
 
-        function getLoadstringUrl(id) { return getBaseDomain() + '/raw/' + id; }
+        function getLoadstringUrl(id) { return window.location.origin + '/#/raw/' + id; }
 
         function escHtml(s) { const d = document.createElement('div');
             d.textContent = s; return d.innerHTML; }
@@ -292,6 +296,56 @@
             clearTimeout(toast._timer);
             toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
+        // ============================================
+        // AUTO RAW DISPLAY - THIS IS THE FIX
+        // ============================================
+        function handleRawEndpoint() {
+            const hash = window.location.hash;
+            
+            // Check if we're on a raw URL
+            if (hash.startsWith('#/raw/')) {
+                const id = hash.replace('#/raw/', '');
+                const scripts = getScripts();
+                const script = scripts.find(s => s.id === id);
+                
+                // Hide auth and app containers
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('appContainer').classList.add('app-hidden');
+                
+                // Create raw display
+                const rawContainer = document.createElement('div');
+                rawContainer.className = 'raw-mode';
+                document.body.innerHTML = '';
+                document.body.appendChild(rawContainer);
+                
+                if (script) {
+                    const content = script.obfuscated || script.originalCode || '-- No content found';
+                    rawContainer.innerHTML = `
+                        <div class="raw-header">
+                            <span>📄 ${escHtml(script.name)}</span>
+                            <span>ID: ${script.id}</span>
+                        </div>
+                        <pre style="margin:0;font-family:'JetBrains Mono',monospace;font-size:13px;white-space:pre-wrap;word-break:break-all;color:#fff;">${escHtml(content)}</pre>
+                    `;
+                    document.title = 'Raw: ' + script.name;
+                } else {
+                    rawContainer.innerHTML = `
+                        <div class="raw-header">
+                            <span style="color:#ff4444;">❌ Script Not Found</span>
+                        </div>
+                        <pre style="margin:0;font-family:'JetBrains Mono',monospace;font-size:16px;color:#ff4444;">Script ID: ${id}\n\nThis script does not exist or has been deleted.</pre>
+                    `;
+                    document.title = 'Script Not Found';
+                }
+                return true; // Indicates raw mode is active
+            }
+            return false; // Not a raw URL
+        }
+
+        // ============================================
+        // AUTH FUNCTIONS
+        // ============================================
 
         function showLogin() {
             document.getElementById('loginForm').style.display = 'block';
@@ -393,6 +447,9 @@
         }
 
         function checkSession() {
+            // Don't run if we're in raw mode
+            if (window.location.hash.startsWith('#/raw/')) return;
+            
             const session = getSession();
             if (session) {
                 const users = getUsers();
@@ -414,6 +471,10 @@
             renderHwids();
         }
 
+        // ============================================
+        // RENDER FUNCTIONS
+        // ============================================
+
         function renderScripts() {
             const scripts = getScripts();
             const container = document.getElementById('appScriptsList');
@@ -431,7 +492,8 @@
             let html = '';
             for (const s of scripts) {
                 const statusClass = s.status === 'active' ? 'badge-active' : 'badge-disabled';
-                const ls = 'loadstring(game:HttpGet("' + getLoadstringUrl(s.id) + '"))()';
+                const rawUrl = getLoadstringUrl(s.id);
+                const ls = 'loadstring(game:HttpGet("' + rawUrl + '"))()';
                 html += '<div class="script-card"><div class="name">' + escHtml(s.name) + '</div><div class="id">ID: ' + s.id +
                     '</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><span class="badge ' +
                     statusClass + '">' + s.status + '</span>' + (s.ffa ?
@@ -442,7 +504,8 @@
                     s.id + '\')">✏️ Edit</button><button class="btn-sm btn-sm-outline" onclick="toggleScript(\'' + s.id +
                     '\')">' + (s.status === 'active' ? '⏸️ Disable' : '▶️ Enable') +
                     '</button><button class="btn-sm btn-sm-danger" onclick="deleteScript(\'' + s.id +
-                    '\')">🗑️</button></div></div>';
+                    '\')">🗑️</button><button class="btn-sm btn-sm-outline" onclick="window.open(\'' + rawUrl +
+                    '\',\'_blank\')">📄 Raw</button></div></div>';
             }
             container.innerHTML = html;
         }
@@ -498,6 +561,10 @@
             container.innerHTML = html;
         }
 
+        // ============================================
+        // SCRIPT OPERATIONS
+        // ============================================
+
         window.toggleScript = function(id) {
             const scripts = getScripts();
             const s = scripts.find(x => x.id === id);
@@ -510,12 +577,12 @@
         }
 
         window.deleteScript = function(id) {
-            if (!confirm('Delete?')) return;
+            if (!confirm('Delete this script permanently?')) return;
             let scripts = getScripts();
             scripts = scripts.filter(s => s.id !== id);
             setScripts(scripts);
             renderScripts();
-            showToast('Deleted', 'success');
+            showToast('Script deleted', 'success');
         }
 
         window.editScript = function(id) {
@@ -545,6 +612,10 @@
             });
         }
 
+        // ============================================
+        // KEY OPERATIONS
+        // ============================================
+
         window.appGenerateKey = function() {
             const keys = getKeys();
             keys.push({
@@ -560,7 +631,7 @@
         }
 
         window.deleteKey = function(key) {
-            if (!confirm('Delete key?')) return;
+            if (!confirm('Delete this key?')) return;
             let keys = getKeys();
             keys = keys.filter(k => k.key !== key);
             setKeys(keys);
@@ -568,10 +639,14 @@
             showToast('Key deleted', 'success');
         }
 
+        // ============================================
+        // HWID OPERATIONS
+        // ============================================
+
         window.appAddHwid = function() {
             const hwid = prompt('Enter HWID to ban:');
             if (!hwid) return;
-            const reason = prompt('Reason:') || 'No reason';
+            const reason = prompt('Reason for ban:') || 'No reason';
             const hwids = getHwids();
             if (hwids.find(h => h.hwid === hwid)) { showToast('Already banned', 'error'); return; }
             hwids.push({ hwid, reason, date: new Date().toLocaleDateString() });
@@ -581,13 +656,17 @@
         }
 
         window.unbanHwid = function(hwid) {
-            if (!confirm('Unban?')) return;
+            if (!confirm('Unban this HWID?')) return;
             let hwids = getHwids();
             hwids = hwids.filter(h => h.hwid !== hwid);
             setHwids(hwids);
             renderHwids();
-            showToast('Unbanned', 'success');
+            showToast('HWID unbanned', 'success');
         }
+
+        // ============================================
+        // OBFUSCATOR
+        // ============================================
 
         function localObfuscate(code) {
             const key = 0x4B;
@@ -635,7 +714,7 @@
                         scripts[idx].compressed = compressed;
                         scripts[idx].updatedAt = new Date().toISOString();
                         delete output.dataset.editId;
-                        showToast('Updated!', 'success');
+                        showToast('Script updated!', 'success');
                     }
                 } else {
                     scripts.unshift({
@@ -648,7 +727,7 @@
                         obfuscated: result,
                         createdAt: new Date().toISOString()
                     });
-                    showToast('Saved!', 'success');
+                    showToast('Script saved!', 'success');
                 }
                 setScripts(scripts);
                 renderScripts();
@@ -685,6 +764,10 @@
             });
         }
 
+        // ============================================
+        // NAVIGATION
+        // ============================================
+
         window.showPanel = function(id) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -703,32 +786,30 @@
             });
         });
 
-        // Raw endpoint handler
-        function handleRawEndpoint() {
-            const hash = window.location.hash;
-            if (hash.startsWith('#/raw/')) {
-                const id = hash.replace('#/raw/', '');
-                const scripts = getScripts();
-                const s = scripts.find(x => x.id === id);
-                if (s) {
-                    const content = s.obfuscated || s.originalCode || '-- No content';
-                    document.body.innerHTML =
-                        '<pre style="background:#000;color:#fff;padding:30px;font-family:monospace;font-size:13px;white-space:pre-wrap;word-break:break-all;min-height:100vh;margin:0;">' +
-                        escHtml(content) + '</pre>';
-                    document.title = 'Raw: ' + s.name;
-                } else {
-                    document.body.innerHTML =
-                        '<pre style="background:#000;color:#ff4444;padding:30px;font-family:monospace;font-size:16px;">Script not found: ' +
-                        id + '</pre>';
-                }
-            }
-        }
+        // ============================================
+        // INIT
+        // ============================================
 
-        window.addEventListener('DOMContentLoaded', () => {
-            handleRawEndpoint();
-            checkSession();
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check if we're in raw mode FIRST
+            const isRaw = handleRawEndpoint();
+            
+            if (!isRaw) {
+                // Not raw mode, show auth/app normally
+                checkSession();
+            }
         });
-        window.addEventListener('hashchange', handleRawEndpoint);
+
+        // Also handle hash changes for raw navigation
+        window.addEventListener('hashchange', function() {
+            // Only handle if we're going to a raw endpoint
+            if (window.location.hash.startsWith('#/raw/')) {
+                // Clear the page and show raw content
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('appContainer').classList.add('app-hidden');
+                handleRawEndpoint();
+            }
+        });
     </script>
 </body>
 </html>
